@@ -258,7 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   point3DPrefabs: {fileID: 5744964805564131210, guid: 6d094a3028fcdda4e98747beeb7cde53,
     type: 3}
-  resolution: 50
+  resolution: 100
   function: 2
 --- !u!1 &963194225
 GameObject:
