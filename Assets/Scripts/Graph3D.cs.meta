@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 6df1b0c5efb92dc4fb833c6116d4aeef
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - point3DPrefabs: {fileID: 5744964805564131210, guid: 6d094a3028fcdda4e98747beeb7cde53,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
