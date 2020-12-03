@@ -6,13 +6,14 @@ public static class FunctionLibrary
     public delegate float Function(float x, float z);
     public delegate Vector3 Function3D(float u, float v, float t);
 
-    public enum FunctionName { Wave, MultiWave, Ripple }
+    public enum FunctionName { Wave, MultiWave, Ripple, Sphere, Torus }
 
     static Function[] functions = { Wave, MultiWave, Ripple };
-    static Function3D[] functions3D = { Wave, MultiWave, Ripple };
+    static Function3D[] functions3D = { Wave, MultiWave, Ripple, Sphere, Torus };
 
     public static Function GetFunction(FunctionName name)
     {
+        Debug.Assert((int)name < functions.Length, "can't show in 2d graph");
         return functions[(int)name];
     }
 
@@ -65,6 +66,25 @@ public static class FunctionLibrary
         Vector3 p = new Vector3(u, 0, v);
         p.y = Sin(PI * (4f * d - t));
         p.y /= 1f + 10f * d;
+        return p;
+    }
+
+    public static Vector3 Sphere(float u, float v, float t)
+    {
+        float r = 0.9f + 0.1f * Sin(PI * (6f * u + 4f * v + t));
+        float s = r * Cos(0.5f * PI * v);
+
+        Vector3 p = new Vector3(s * Sin(PI * u), r * Sin(PI * 0.5f * v), s * Cos(PI * u));
+        return p;
+    }
+
+    public static Vector3 Torus(float u, float v, float t)
+    {
+        float r1 = 0.7f + 0.1f * Sin(PI * (6f * u + 0.5f * t));
+        float r2 = 0.15f + 0.05f * Sin(PI * (8f * u + 4f * v + 2f * t));
+        float s = r1 + r2 * Cos(PI * v);
+
+        Vector3 p = new Vector3(s * Sin(PI * u), r2 * Sin(PI * v), s * Cos(PI * u));
         return p;
     }
 }
