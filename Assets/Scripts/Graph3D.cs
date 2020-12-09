@@ -13,6 +13,15 @@ public class Graph3D : MonoBehaviour
     [SerializeField]
     FunctionLibrary.FunctionName function = default;
 
+    public enum TransitionMode { Cycle, Random}
+    [SerializeField]
+    TransitionMode transitionMode = TransitionMode.Cycle;
+
+    [SerializeField, Min(0f)]
+    float functionDuration = 1f;
+    float duration;
+
+
     private void Awake()
     {
         // initialize some variable to help create points
@@ -33,6 +42,24 @@ public class Graph3D : MonoBehaviour
     }
 
     private void Update()
+    {
+        duration += Time.deltaTime;
+        if(duration >= functionDuration)
+        {
+            duration -= functionDuration;
+            PickNextFunction();
+        }
+        UpdateFunction();
+    }
+
+    void PickNextFunction()
+    {
+        function = FunctionLibrary.GetNextFunctionName(function);
+        if(transitionMode == TransitionMode.Random)
+            function = FunctionLibrary.GetRandomFunctionNameOtherThan(function);
+    }
+
+    private void UpdateFunction()
     {
         // the function and current time
         FunctionLibrary.Function3D f = FunctionLibrary.GetFunction3D(function);

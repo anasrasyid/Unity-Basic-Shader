@@ -11,6 +11,17 @@ public static class FunctionLibrary
     static Function[] functions = { Wave, MultiWave, Ripple };
     static Function3D[] functions3D = { Wave, MultiWave, Ripple, Sphere, Torus };
 
+    public static FunctionName GetNextFunctionName(FunctionName name)
+    {
+        return (int)name < functions3D.Length - 1 ? name + 1: 0;
+    }
+
+    public static FunctionName GetRandomFunctionNameOtherThan(FunctionName name)
+    {
+        var choice = (FunctionName)Random.Range(1, functions3D.Length);
+        return choice == name ? 0 : choice;
+    }
+
     public static Function GetFunction(FunctionName name)
     {
         Debug.Assert((int)name < functions.Length, "can't show in 2d graph");

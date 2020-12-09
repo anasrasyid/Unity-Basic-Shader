@@ -189,7 +189,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -417,7 +417,9 @@ MonoBehaviour:
   point3DPrefabs: {fileID: 5744964805564131210, guid: 6d094a3028fcdda4e98747beeb7cde53,
     type: 3}
   resolution: 100
-  function: 4
+  function: 0
+  transitionMode: 0
+  functionDuration: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
