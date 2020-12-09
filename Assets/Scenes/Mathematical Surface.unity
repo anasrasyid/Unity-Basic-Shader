@@ -418,8 +418,9 @@ MonoBehaviour:
     type: 3}
   resolution: 100
   function: 0
-  transitionMode: 0
+  transitionMode: 1
   functionDuration: 1
+  transitionDuration: 0.5
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,13 @@ public static class FunctionLibrary
         return choice == name ? 0 : choice;
     }
 
+    public static Vector3 Morph(float u, float v, float t,
+        Function3D from, Function3D to, float progress)
+    {
+        return Vector3.LerpUnclamped(
+            from(u, v, t), to(u, v, t), SmoothStep(0f, 1f, progress));
+    }
+
     public static Function GetFunction(FunctionName name)
     {
         Debug.Assert((int)name < functions.Length, "can't show in 2d graph");
