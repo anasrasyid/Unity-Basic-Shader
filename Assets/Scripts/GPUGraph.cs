@@ -3,17 +3,24 @@
 public class GPUGraph : MonoBehaviour
 {
 
-    [SerializeField, Range(10, 200)]
+    [SerializeField, Range(10, 1000)]
     int resolution = 10;
-
-    [SerializeField]
-    ComputeShader computeShader = default;
 
     static readonly int
         positionsId = Shader.PropertyToID("_Positions"),
         resolutionId = Shader.PropertyToID("_Resolution"),
+        scaleId = Shader.PropertyToID("_Scale"),
         stepId = Shader.PropertyToID("_Step"),
         timeId = Shader.PropertyToID("_Time");
+
+    [SerializeField]
+    ComputeShader computeShader = default;
+
+    [SerializeField]
+    Material material = default;
+
+    [SerializeField]
+    Mesh mesh = default;
 
     [SerializeField]
     FunctionLibrary.FunctionName function = default;
@@ -73,6 +80,12 @@ public class GPUGraph : MonoBehaviour
         computeShader.SetBuffer(0, positionsId, positionBuffer);
         int groups = Mathf.CeilToInt(resolution / 8f);
         computeShader.Dispatch(0, groups, groups, 1);
+
+        material.SetBuffer(positionsId, positionBuffer);
+        material.SetVector(scaleId, new Vector4(step, 1f / step));
+
+        var bounds = new Bounds(Vector3.zero, new Vector3(2f, 2f + 2f / resolution, 2f));
+        Graphics.DrawMeshInstancedProcedural(mesh, 0, material, bounds, positionBuffer.count);
     }
 
     void PickNextFunction()
