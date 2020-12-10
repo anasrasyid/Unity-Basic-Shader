@@ -3,7 +3,9 @@
 public class GPUGraph : MonoBehaviour
 {
 
-    [SerializeField, Range(10, 1000)]
+    const int maxResolution = 1000;
+
+    [SerializeField, Range(10, maxResolution)]
     int resolution = 10;
 
     static readonly int
@@ -40,7 +42,7 @@ public class GPUGraph : MonoBehaviour
 
     private void OnEnable()
     {
-        positionBuffer = new ComputeBuffer(resolution * resolution, 3 * 4);
+        positionBuffer = new ComputeBuffer(maxResolution * maxResolution, 3 * 4);
     }
 
     private void OnDisable()
@@ -85,7 +87,7 @@ public class GPUGraph : MonoBehaviour
         material.SetVector(scaleId, new Vector4(step, 1f / step));
 
         var bounds = new Bounds(Vector3.zero, new Vector3(2f, 2f + 2f / resolution, 2f));
-        Graphics.DrawMeshInstancedProcedural(mesh, 0, material, bounds, positionBuffer.count);
+        Graphics.DrawMeshInstancedProcedural(mesh, 0, material, bounds, resolution * resolution);
     }
 
     void PickNextFunction()
