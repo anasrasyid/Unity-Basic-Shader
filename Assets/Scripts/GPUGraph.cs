@@ -13,7 +13,8 @@ public class GPUGraph : MonoBehaviour
         resolutionId = Shader.PropertyToID("_Resolution"),
         scaleId = Shader.PropertyToID("_Scale"),
         stepId = Shader.PropertyToID("_Step"),
-        timeId = Shader.PropertyToID("_Time");
+        timeId = Shader.PropertyToID("_Time"),
+        transitionProgressId = Shader.PropertyToID("_TransitionProgress");
 
     [SerializeField]
     ComputeShader computeShader = default;
@@ -35,7 +36,7 @@ public class GPUGraph : MonoBehaviour
     float functionDuration = 1f, transitionDuration = 1f;
 
     float duration;
-    bool transioning;
+    bool transitioning;
     FunctionLibrary.FunctionName transitionFunction;
 
     ComputeBuffer positionBuffer;
@@ -56,15 +57,15 @@ public class GPUGraph : MonoBehaviour
         duration += Time.deltaTime;
 
         // Function Change based on condition
-        if (transioning && duration >= transitionDuration)
+        if (transitioning && duration >= transitionDuration)
         {
             duration -= functionDuration;
-            transioning = false;
+            transitioning = false;
         }
         else if (duration >= functionDuration)
         {
             duration -= functionDuration;
-            transioning = true;
+            transitioning = true;
             transitionFunction = function;
             PickNextFunction();
         }
@@ -78,10 +79,20 @@ public class GPUGraph : MonoBehaviour
         computeShader.SetInt(resolutionId, resolution);
         computeShader.SetFloat(stepId, step);
         computeShader.SetFloat(timeId, Time.time);
+        if (transitioning)
+        {
+            computeShader.SetFloat(
+                transitionProgressId,
+                Mathf.SmoothStep(0f, 1f, duration / transitionDuration)
+            );
+        }
 
-        computeShader.SetBuffer(0, positionsId, positionBuffer);
+        var kernelIndex = (int)function 
+            + (int)(transitioning ? transitionFunction : function) * FunctionLibrary.FunctionCount;
+        computeShader.SetBuffer(kernelIndex, positionsId, positionBuffer);
+
         int groups = Mathf.CeilToInt(resolution / 8f);
-        computeShader.Dispatch(0, groups, groups, 1);
+        computeShader.Dispatch(kernelIndex, groups, groups, 1);
 
         material.SetBuffer(positionsId, positionBuffer);
         material.SetVector(scaleId, new Vector4(step, 1f / step));

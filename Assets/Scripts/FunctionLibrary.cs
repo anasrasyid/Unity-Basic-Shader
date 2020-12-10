@@ -22,6 +22,8 @@ public static class FunctionLibrary
         return choice == name ? 0 : choice;
     }
 
+    public static int FunctionCount => functions3D.Length;
+
     public static Vector3 Morph(float u, float v, float t,
         Function3D from, Function3D to, float progress)
     {
